@@ -1,0 +1,109 @@
+<!-- CSC3007-Assignment1 -->
+<!-- 
+can put HTML, JS, CSS in 1 file or multiple directories 
+
+Problem
+1. Connect to the data.gov.sg PSI API and get the realtime dataset. It is detailed here.
+2. The URI for the API is: https://api.data.gov.sg/v1/environment/psi
+3. Print out all readings data into a table. There are 12 readings, from o3_sub_index to psi_twenty_four_hourly.
+Extra Challenge
+1. Theme the layout of the table nicely using CSS. Or just use some nice looking CSS framework.
+2. Print out the timestamp of when the data in the reading was updated. Use some datetime library to output the date / time nicely.
+-->
+<html>
+    <head>
+        <title>CSC3007-Assignment1</title>
+    </head>
+    <style>
+
+    </style>
+    <body>
+        <p id="tsp"></p>
+        <!-- Create table -->
+        <table id="myTable" style="width:100%">
+            <tr>
+                <th>Metric</th>
+                <th>National</th>
+                <th>Central</th>
+                <th>West</th>
+                <th>East</th>
+                <th>North</th>
+                <th>South</th>
+            </tr>
+        </table>
+        <script>
+        //console.log("Fetching data gov environment PSI API");
+            fetch('https://api.data.gov.sg/v1/environment/psi')
+                .then(response => response.json())
+                // .then(data => console.log(data.items[0].timestamp));
+                .then(function (data) {
+                    appendData(data.items[0])
+                });
+            // .then(data => console.log(data.items[0].carpark_data.length));
+            //console.log("End of fetching carpark API");
+            function appendData(inData) {
+                //console.log(inData);
+                console.log(inData.readings);
+                console.log(inData.update_timestamp);
+                var timestamp = new Date(inData.update_timestamp);
+                tsp.innerHTML = "Last Updated On " + timestamp.toUTCString();
+                // var data = inData.readings;
+                // var dataCount = Object.keys(data).length;
+                // console.log(dataCount);
+                // console.log(Object.keys(data)[0]); //co_subIndex 
+                // console.log("Try");
+
+                // var innerData = data.o3_sub_index;
+                // console.log(innerData);
+                // console.log(Object.keys(innerData)[0]);
+                for (const key in inData.readings) {
+                    //Loop through number of rows
+                    //console.log(`${key}: ${inData.readings[key]}`);
+                    var table = document.getElementById("myTable");
+                    var row = table.insertRow();
+                    // var row = table.insertRow(i + x + 1);
+                    var metricCell = row.insertCell(0);
+                    var nationalCell = row.insertCell(1);
+                    var centralCell = row.insertCell(2);
+                    var westCell = row.insertCell(3);
+                    var eastCell = row.insertCell(4);
+                    var northCell = row.insertCell(5);
+                    var southCell = row.insertCell(6);
+
+                    metricCell.innerHTML = key.toString();
+                    console.log(key.toString());
+                    
+                    // nationalCell.innerHTML = key.value.toString();
+                    // lotTypeCell.innerHTML = inData[i].carpark_info[x].lot_type;
+                    // totalLotCell.innerHTML = inData[i].carpark_info[x].total_lots;
+                    // lotAvailCell.innerHTML = inData[i].carpark_info[x].lots_available;
+                    // var utilCalc = Math.round(inData[i].carpark_info[x].lots_available / inData[i].carpark_info[x].total_lots * 100);
+                    // utilCell.innerHTML = utilCalc.toString() + "%";
+                    for (const value in inData.readings[key]) {
+                        //Loop through columns in row
+                        console.log(`${value}: ${inData.readings[key][value]}`);
+                        if (value==="west") {
+                            westCell.innerHTML = inData.readings[key][value];
+                        }
+                        if (value === "national") {
+                            nationalCell.innerHTML = inData.readings[key][value];
+                        }
+                        if (value === "east") {
+                            eastCell.innerHTML = inData.readings[key][value];
+                        }
+                        if (value === "central") {
+                            centralCell.innerHTML = inData.readings[key][value];
+                        }
+                        if (value === "south") {
+                            southCell.innerHTML = inData.readings[key][value];
+                        }
+                        if (value === "north") {
+                            northCell.innerHTML = inData.readings[key][value];
+                        }
+                    } //inner for loop
+                } //for loop
+            } //appendData Function
+
+        </script>
+    </body>
+</html>
