@@ -13,24 +13,51 @@ Extra Challenge
 <html>
     <head>
         <title>CSC3007-Assignment1</title>
+        <!-- Use Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <style>
 
+        p,
+        table,
+        thead,
+        tr,
+        tbody,
+        th,
+        td {
+        text-align: center;
+        }
+
     </style>
     <body>
-        <p id="tsp"></p>
-        <!-- Create table -->
-        <table id="myTable" style="width:100%">
-            <tr>
-                <th>Metric</th>
-                <th>National</th>
-                <th>Central</th>
-                <th>West</th>
-                <th>East</th>
-                <th>North</th>
-                <th>South</th>
-            </tr>
-        </table>
+                <p id="tsp"></p>
+
+            <!-- Create table -->
+            <table id="myTable" class="table table-striped table-bordered">
+                <tr>
+                    <th scope="col">Metric</th>
+                    <th scope="col">National</th>
+                    <th scope="col">Central</th>
+                    <th scope="col">West</th>
+                    <th scope="col">East</th>
+                    <th scope="col">North</th>
+                    <th scope="col">South</th>
+                </tr>
+            </table>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/luxon@2.4.0/build/global/luxon.min.js"
+            integrity="sha256-DIsAGD2EF8Qq2PCH9yzX/yt9FliJfWf+aGcdgR6tKwo=" crossorigin="anonymous"></script>
+                
         <script>
         //console.log("Fetching data gov environment PSI API");
             fetch('https://api.data.gov.sg/v1/environment/psi')
@@ -45,8 +72,10 @@ Extra Challenge
                 //console.log(inData);
                 console.log(inData.readings);
                 console.log(inData.update_timestamp);
-                var timestamp = new Date(inData.update_timestamp);
-                tsp.innerHTML = "Last Updated On " + timestamp.toUTCString();
+                // console.log(luxon.DateTime.fromISO(inData.update_timestamp).toFormat('dd LLL yyyy HH:mm')); //=> '2014 Aug 06'
+                var formattedDt = luxon.DateTime.fromISO(inData.update_timestamp).toFormat('dd LLL yyyy HH:mm');
+                tsp.innerHTML = "Last Updated On " +  formattedDt; 
+                // tsp.innerHTML = "Last Updated On " +  luxon.DateTime(timestamp, "dd-MMM-yyyy HH:mm");
                 // var data = inData.readings;
                 // var dataCount = Object.keys(data).length;
                 // console.log(dataCount);
